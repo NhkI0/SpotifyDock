@@ -1,4 +1,4 @@
-﻿name: Build and Release SpotifyDock
+name: Build and Release SpotifyDock
 
 on:
   push:
