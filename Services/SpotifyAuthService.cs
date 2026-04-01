@@ -119,7 +119,7 @@ public class SpotifyAuthService
     {
         try
         {
-            var dir = Path.GetDirectoryName(TokenPath);
+            var dir = Path.GetDirectoryName(TokenPath)!;
             Directory.CreateDirectory(dir);
             var encrypted = ProtectedData.Protect(
                 Encoding.UTF8.GetBytes(token), null,

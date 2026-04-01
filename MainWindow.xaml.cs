@@ -1,60 +1,50 @@
-﻿using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using SpotifyDock.Services;
+using SpotifyDock.ViewModels;
 
 namespace SpotifyDock;
 
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
 public partial class MainWindow : Window
 {
-    private readonly MediaKeyService _mediaKey = new();
-    private readonly SpotifyAuthService _authService = new();
-    
     public MainWindow()
     {
         InitializeComponent();
     }
-    
-    private void Previous_Click(object sender, RoutedEventArgs e)
+
+    private void Border_MouseLeftButtonDown(
+        object sender, MouseButtonEventArgs e)
     {
-        _mediaKey.PreviousTrack();
+        if (e.ClickCount == 1)
+            DragMove();
     }
 
-    private void Next_Click(object sender, RoutedEventArgs e)
+    private void AlbumArt_Click(
+        object sender, MouseButtonEventArgs e)
     {
-        _mediaKey.NextTrack();
-    }
-    
-    private void PlayPause_Click(object sender, RoutedEventArgs e)
-    {
-        _mediaKey.PlayPause();
+        if (DataContext is PlayerViewModel vm && !vm.IsConnected)
+            vm.ConnectCommand.Execute(null);
+        e.Handled = true;
     }
 
-    private async void Connect_Click(object sender, RoutedEventArgs e)
+    private void CloseButton_Click(
+        object sender, RoutedEventArgs e)
     {
-        StatusText.Text = "Connecting...";
+        Application.Current.Shutdown();
+    }
 
-        var client = await _authService.AuthenticateAsync();
-
-        if (client != null)
+    private void ProgressBar_Click(
+        object sender, MouseButtonEventArgs e)
+    {
+        if (DataContext is PlayerViewModel vm && vm.IsConnected)
         {
-            StatusText.Text = "Connected";
-            StatusText.Foreground = new System.Windows.Media.SolidColorBrush(
-                System.Windows.Media.Color.FromRgb(0x1D, 0xB9, 0x54));
+            var clickX = e.GetPosition(ProgressBarGrid).X;
+            var totalWidth = ProgressBarGrid.ActualWidth;
+            if (totalWidth > 0)
+            {
+                var percent = Math.Clamp(clickX / totalWidth, 0, 1);
+                vm.SeekCommand.Execute(percent);
+            }
         }
-        else
-        {
-            StatusText.Text = "Connection failed. Try again.";
-        }
+        e.Handled = true;
     }
 }

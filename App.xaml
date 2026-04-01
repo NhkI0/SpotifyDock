@@ -4,6 +4,134 @@
              xmlns:local="clr-namespace:SpotifyDock"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <local:NullToVisibleConverter x:Key="NullToVisibleConverter" />
+        <local:ProgressWidthConverter x:Key="ProgressWidthConverter" />
+        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+
+        <!-- Colors -->
+        <Color x:Key="SpotifyGreen">#1DB954</Color>
+        <Color x:Key="SpotifyGreenDark">#1AA34A</Color>
+        <SolidColorBrush x:Key="GreenBrush"
+            Color="{StaticResource SpotifyGreen}" />
+        <SolidColorBrush x:Key="TextPrimary" Color="#EAEAEA" />
+        <SolidColorBrush x:Key="TextSecondary" Color="#9A9AB0" />
+        <SolidColorBrush x:Key="TextDimmed" Color="#5A5A72" />
+
+        <!-- Playback control button -->
+        <Style x:Key="ControlButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#AAAACC" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FontFamily"
+                Value="Segoe Fluent Icons, Segoe MDL2 Assets" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Width" Value="30" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bg" Background="Transparent"
+                                CornerRadius="15"
+                                Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}">
+                            <ContentPresenter
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground"
+                                        Value="White" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Foreground"
+                                    Value="{StaticResource GreenBrush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Play/Pause button (larger, accent) -->
+        <Style x:Key="PlayPauseButton" TargetType="Button"
+               BasedOn="{StaticResource ControlButton}">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Width" Value="34" />
+            <Setter Property="Height" Value="34" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bg" CornerRadius="17"
+                                Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}">
+                            <Border.Background>
+                                <SolidColorBrush
+                                    Color="{StaticResource SpotifyGreen}"
+                                    Opacity="0.15" />
+                            </Border.Background>
+                            <ContentPresenter
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bg"
+                                        Property="Background">
+                                    <Setter.Value>
+                                        <SolidColorBrush
+                                            Color="{StaticResource SpotifyGreen}"
+                                            Opacity="0.3" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Bg"
+                                        Property="Background">
+                                    <Setter.Value>
+                                        <SolidColorBrush
+                                            Color="{StaticResource SpotifyGreen}"
+                                            Opacity="0.5" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Close button (subtle) -->
+        <Style x:Key="CloseButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#444466" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FontSize" Value="8" />
+            <Setter Property="Width" Value="14" />
+            <Setter Property="Height" Value="14" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bg" Background="Transparent"
+                                CornerRadius="7"
+                                Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}">
+                            <ContentPresenter
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground"
+                                        Value="#FF6666" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Resources>
 </Application>
