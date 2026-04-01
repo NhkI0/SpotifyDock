@@ -1,0 +1,43 @@
+﻿name: Build and Release SpotifyDock
+
+on:
+  push:
+    tags:
+      - 'v*' # Trigger only when you push a tag like v1.0.0
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write # Required to create the release
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Inject Secret Client ID
+        shell: pwsh
+        run: |
+          # Finds the placeholder and replaces it with the GitHub Secret
+          $path = "SpotifyDock/Services/SpotifyAuthService.cs"
+          (Get-Content $path) -replace 'SPOTIFY_CLIENT_ID_PLACEHOLDER', '${{ secrets.SPOTIFY_CLIENT_ID }}' | Set-Content $path
+
+      - name: Publish App
+        run: dotnet publish -c Release
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          # This grabs the single .exe from your publish folder
+          files: |
+            SpotifyDock/bin/Release/net8.0-windows/win-x64/publish/SpotifyDock.exe
+          name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

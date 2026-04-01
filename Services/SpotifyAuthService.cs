@@ -8,7 +8,7 @@ namespace SpotifyDock.Services;
 
 public class SpotifyAuthService
 {
-    private const string ClientId = "https://developer.spotify.com/dashboard"; // Get your token using the link
+    private const string ClientId = "SPOTIFY_CLIENT_ID_PLACEHOLDER";
     private static readonly Uri RedirectUri = new ("http://127.0.0.1:5543/callback");
 
     private static readonly string TokenPath = Path.Combine(
