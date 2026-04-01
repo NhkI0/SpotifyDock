@@ -20,29 +20,27 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: Inject Secret Client ID
+      - name: Inject Spotify Client ID
         shell: pwsh
         run: |
-          $path = Get-ChildItem -Recurse -Filter "SpotifyAuthService.cs" | Select-Object -ExpandProperty FullName
-
-          if ($path) {
-            Write-Host "Found service at: $path"
-            (Get-Content $path) -replace 'SPOTIFY_CLIENT_ID_PLACEHOLDER', '${{ secrets.SPOTIFY_CLIENT_ID }}' | Set-Content $path
-          } else {
-            Write-Error "Could not find SpotifyAuthService.cs in the repository!"
+          $file = "SpotifyAuthService.cs"
+          $match = Get-ChildItem -Recurse -Filter $file | Select-Object -First 1
+          if (-not $match) {
+            Write-Error "$file not found in repository"
             exit 1
           }
+          Write-Host "Patching $($match.FullName)"
+          (Get-Content $match.FullName) -replace 'SPOTIFY_CLIENT_ID_PLACEHOLDER', '${{ secrets.SPOTIFY_CLIENT_ID }}' | Set-Content $match.FullName
 
-      - name: Publish App
-        run: dotnet publish -c Release
+      - name: Publish
+        run: dotnet publish SpotifyDock.csproj -c Release
 
-      - name: Create Release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            SpotifyDock/bin/Release/net8.0-windows/win-x64/publish/SpotifyDock.exe
-          name: Release ${{ github.ref_name }}
+          name: "SpotifyDock ${{ github.ref_name }}"
           draft: false
           prerelease: false
+          files: bin/Release/net8.0-windows/win-x64/publish/SpotifyDock.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
