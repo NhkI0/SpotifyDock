@@ -3,13 +3,13 @@
 on:
   push:
     tags:
-      - 'v*' # Trigger only when you push a tag like v1.0.0
+      - 'v*'
 
 jobs:
   build:
     runs-on: windows-latest
     permissions:
-      contents: write # Required to create the release
+      contents: write
 
     steps:
       - name: Checkout Code
@@ -21,11 +21,18 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Inject Secret Client ID
-        shell: pwsh
-        run: |
-          # Finds the placeholder and replaces it with the GitHub Secret
-          $path = "SpotifyDock/Services/SpotifyAuthService.cs"
-          (Get-Content $path) -replace 'SPOTIFY_CLIENT_ID_PLACEHOLDER', '${{ secrets.SPOTIFY_CLIENT_ID }}' | Set-Content $path
+          shell: pwsh
+          run: |
+            # Try to find the file dynamically to avoid path errors
+            $path = Get-ChildItem -Recurse -Filter "SpotifyAuthService.cs" | Select-Object -ExpandProperty FullName
+            
+            if ($path) {
+                Write-Host "Found service at: $path"
+                (Get-Content $path) -replace 'SPOTIFY_CLIENT_ID_PLACEHOLDER', '${{ secrets.SPOTIFY_CLIENT_ID }}' | Set-Content $path
+            } else {
+                Write-Error "Could not find SpotifyAuthService.cs in the repository!"
+                exit 1
+            }
 
       - name: Publish App
         run: dotnet publish -c Release
@@ -33,7 +40,6 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          # This grabs the single .exe from your publish folder
           files: |
             SpotifyDock/bin/Release/net8.0-windows/win-x64/publish/SpotifyDock.exe
           name: Release ${{ github.ref_name }}
