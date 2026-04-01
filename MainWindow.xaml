@@ -5,11 +5,16 @@
         Background="#1E1E36">
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"
                     Orientation="Horizontal">
-            <Button Content="Previous" Margin="5" Padding="10.5"
-                    Click="Previous_Click"/>
-            <Button Content="Play/Pause" Margin="5" Padding="10.5"
-                    Click="PlayPause_Click"/>
-            <Button Content="Next" Margin="5" Padding="10.5"
-                    Click="Next_Click"/>
+            <!-- <Button Content="Previous" Margin="5" Padding="10.5" -->
+            <!--         Click="Previous_Click"/> -->
+            <!-- <Button Content="Play/Pause" Margin="5" Padding="10.5" -->
+            <!--         Click="PlayPause_Click"/> -->
+            <!-- <Button Content="Next" Margin="5" Padding="10.5" -->
+            <!--         Click="Next_Click"/> -->
+            <TextBlock x:Name="StatusText" Text="Not Connected"
+                       FontSize="16" Foreground="#EAEAEA"
+                       HorizontalAlignment="Center"/>
+            <Button Content="Connect to Spotify" Margin="0,10,0,0"
+                    Padding="15.8" Click="Connect_Click"/>
         </StackPanel>
 </Window>

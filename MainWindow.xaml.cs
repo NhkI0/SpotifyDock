@@ -18,6 +18,7 @@ namespace SpotifyDock;
 public partial class MainWindow : Window
 {
     private readonly MediaKeyService _mediaKey = new();
+    private readonly SpotifyAuthService _authService = new();
     
     public MainWindow()
     {
@@ -37,5 +38,23 @@ public partial class MainWindow : Window
     private void PlayPause_Click(object sender, RoutedEventArgs e)
     {
         _mediaKey.PlayPause();
+    }
+
+    private async void Connect_Click(object sender, RoutedEventArgs e)
+    {
+        StatusText.Text = "Connecting...";
+
+        var client = await _authService.AuthenticateAsync();
+
+        if (client != null)
+        {
+            StatusText.Text = "Connected";
+            StatusText.Foreground = new System.Windows.Media.SolidColorBrush(
+                System.Windows.Media.Color.FromRgb(0x1D, 0xB9, 0x54));
+        }
+        else
+        {
+            StatusText.Text = "Connection failed. Try again.";
+        }
     }
 }
