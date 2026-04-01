@@ -3,10 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="SpotifyDock" Height="120" Width="360"
         Background="#1E1E36">
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="SpotifyDock" FontSize="24" Foreground="#1DB954"
-                           FontWeight="Bold" HorizontalAlignment="Center" />
-                <TextBlock Text="Coming soon (or not)..." FontSize="12" Foreground="#9A9AB0"
-                            HorizontalAlignment="Center" Margin="0,4,0,0" />
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"
+                    Orientation="Horizontal">
+            <Button Content="Previous" Margin="5" Padding="10.5"
+                    Click="Previous_Click"/>
+            <Button Content="Play/Pause" Margin="5" Padding="10.5"
+                    Click="PlayPause_Click"/>
+            <Button Content="Next" Margin="5" Padding="10.5"
+                    Click="Next_Click"/>
         </StackPanel>
 </Window>
