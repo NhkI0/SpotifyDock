@@ -21,6 +21,6 @@ public class TrackInfo
         var ts = TimeSpan.FromMilliseconds(ms);
         return ts.TotalHours >= 1
             ? ts.ToString(@"h\:mm\:ss")
-            : ts.ToString(@"mm\:ss");
+            : ts.ToString(@"m\:ss");
     }
 }
