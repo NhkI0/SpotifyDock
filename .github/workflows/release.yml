@@ -21,18 +21,17 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Inject Secret Client ID
-          shell: pwsh
-          run: |
-            # Try to find the file dynamically to avoid path errors
-            $path = Get-ChildItem -Recurse -Filter "SpotifyAuthService.cs" | Select-Object -ExpandProperty FullName
-            
-            if ($path) {
-                Write-Host "Found service at: $path"
-                (Get-Content $path) -replace 'SPOTIFY_CLIENT_ID_PLACEHOLDER', '${{ secrets.SPOTIFY_CLIENT_ID }}' | Set-Content $path
-            } else {
-                Write-Error "Could not find SpotifyAuthService.cs in the repository!"
-                exit 1
-            }
+        shell: pwsh
+        run: |
+          $path = Get-ChildItem -Recurse -Filter "SpotifyAuthService.cs" | Select-Object -ExpandProperty FullName
+
+          if ($path) {
+            Write-Host "Found service at: $path"
+            (Get-Content $path) -replace 'SPOTIFY_CLIENT_ID_PLACEHOLDER', '${{ secrets.SPOTIFY_CLIENT_ID }}' | Set-Content $path
+          } else {
+            Write-Error "Could not find SpotifyAuthService.cs in the repository!"
+            exit 1
+          }
 
       - name: Publish App
         run: dotnet publish -c Release
