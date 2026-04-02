@@ -37,9 +37,9 @@ public class SpotifyAuthService
                 SaveRefreshToken(response.RefreshToken);
                 return BuildClient(response);
             }
-            catch
+            catch (APIException) // If token incorrect
             {
-                // Token expired or invalid, go to fresh auth
+                if (File.Exists(TokenPath)) File.Delete(TokenPath);
             }
         }
 
