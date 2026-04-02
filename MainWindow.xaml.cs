@@ -43,10 +43,18 @@ public partial class MainWindow : Window
             _topmostTimer.Tick += (_, _) => ForceTopmost();
             _topmostTimer.Start();
         };
-
+        this.Loaded += MainWindow_OnLoaded; // For auto connect
         Deactivated += (_, _) => ForceTopmost();
     }
 
+    private async void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is PlayerViewModel vm)
+        {
+            await vm.ConnectAsync();
+        }
+    }
+    
     protected override void OnSourceInitialized(EventArgs e)
     {
         base.OnSourceInitialized(e);

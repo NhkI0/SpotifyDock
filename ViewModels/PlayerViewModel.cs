@@ -128,9 +128,9 @@ public partial class PlayerViewModel : ObservableObject
             }
         });
     }
-
+    
     [RelayCommand]
-    private async Task ConnectAsync()
+    public async Task ConnectAsync()
     {
         if (IsConnected) return;
         TrackName = "Connecting...";
