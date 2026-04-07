@@ -58,11 +58,6 @@
                                 BlurRadius="12" ShadowDepth="0"
                                 Opacity="0.25" />
                         </Border.Effect>
-                        <Border.Background>
-                            <SolidColorBrush
-                                Color="{StaticResource SpotifyGreen}"
-                                Opacity="0.1" />
-                        </Border.Background>
                     </Border>
                     <Border x:Name="AlbumArtBorder"
                             Width="44" Height="44"
